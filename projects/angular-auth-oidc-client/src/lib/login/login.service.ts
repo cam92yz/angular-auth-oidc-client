@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { AuthStateService } from '../authState/auth-state.service';
 import { AuthWellKnownService } from '../config/auth-well-known.service';
 import { ConfigurationProvider } from '../config/config.provider';
@@ -84,7 +84,7 @@ export class LoginService {
 
         this.popupService.openPopUp(authUrl, popupOptions);
 
-        return this.popupService.receivedUrl$.pipe(
+        return this.popupService.receivedUrl$.pipe(take(1),
           switchMap((url: string) => this.checkAuthService.checkAuth(url)),
           map((isAuthenticated) => ({
             isAuthenticated,
